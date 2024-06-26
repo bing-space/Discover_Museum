@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Museum Show Page</h1>
+    <h5><%= museum.title %></h5>
+    <h6><%= museum.location %></h6>
+    <h6><%= museum.description %></h6>
+    <h6>$<%= museum.price %></h6>
+
+    <hr>
+    <a href="/museums/<%= museum._id%>/edit">Edit Museum</a>
+    <a href="/museums">Back to Museum List</a>
+    <form action="/museums/<%= museum._id%>?_method=DELETE" method="post">
+        <button>Delete Museum</button>
+    </form>
+</body>
+</html>

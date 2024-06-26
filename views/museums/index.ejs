@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum List</title>
+</head>
+<body>
+    <h1>Museum List</h1>
+    <h3><a href="/museums/new">Create New Museum</a></h3>
+    <% for(let i of museums) { %>
+        <ul>
+            <a href="/museums/<%= i._id %>"><%= i.title %></a>
+            <p><%= i.location %></p>
+            <p><%= i.description %></p>
+            <p><%= i.price %></p>
+        </ul>
+    <% } %>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>New Museum</h1>
+    <form action="/museums" method="post">
+        <section>
+            <label for="title">Name</label>
+            <input type="text" name="title" id="title">
+        </section>
+        <section>
+            <label for="title">Location</label>
+            <input type="text" name="location" id="location">
+        </section>
+        <section>
+            <label for="title">Description</label>
+            <textarea type="text" name="description" id="description"></textarea>
+        </section>
+        <section>
+            <label for="title">price</label>
+            <input type="number" step=".01" name="price" id="price">
+        </section>
+        <button>Submit</button>
+    </form>
+    <a href="/museums">Back to Museum List</a>
+
+</body>
+</html>

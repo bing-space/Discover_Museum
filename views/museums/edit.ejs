@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Edit Museum</h1>
+    <form action="/museums/<%= museum._id%>?_method=PUT" method="post">
+        <section>
+            <label for="title">Name</label>
+            <input type="text" name="title" id="title" value="<%= museum.title%>">
+        </section>
+        <section>
+            <label for="title">Location</label>
+            <input type="text" name="location" id="location" value="<%= museum.location%>">
+        </section>
+        <section>
+            <label for="title">Description</label>
+            <textarea type="text" name="description" id="description">
+                <%= museum.description%>
+            </textarea>
+        </section>
+        <section>
+            <label for="title">price</label>
+            <input type="number" step=".01" name="price" id="price" value="<%= museum.price%>">
+        </section>
+        <button>Submit</button>
+    </form>
+    <a href="/museums/<%= museum._id %>">Cancel Edit - Back to Show Page</a>
+</body>
+</html>
