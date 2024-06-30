@@ -1,22 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Museum Show Page</h1>
-    <h5><%= museum.title %></h5>
-    <h6><%= museum.location %></h6>
-    <h6><%= museum.description %></h6>
-    <h6>$<%= museum.price %></h6>
+<% layout('layouts/boilerplate') -%>
 
-    <hr>
-    <a href="/museums/<%= museum._id%>/edit">Edit Museum</a>
-    <a href="/museums">Back to Museum List</a>
-    <form action="/museums/<%= museum._id%>?_method=DELETE" method="post">
-        <button>Delete Museum</button>
-    </form>
-</body>
-</html>
+<div class="card">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="<%= museum.image %>" class="img-fluid" alt="">
+            </div>
+            <div class="col-sm-8">
+                <div class="d-flex flex-column mb-3">
+                <div class="p-2">
+                    <h4 class="card-title" style="font-weight: bold; font-size: 30px;"><%= museum.title %></h4>
+                </div>
+                <div class="p-2">
+                    <p class="card-text"><%= museum.description %></p>
+                    <p class="card-text"><i class="fa-solid fa-location-dot"></i> <%= museum.location %></p>
+                    <p class="card-text"><i class="fa-solid fa-tag"></i> $<%= museum.price %></p>
+                </div>
+                <div class="p-2">
+                    <a class="card-link btn btn-info" href="/museums/<%=museum._id%>/edit">Edit Museum</a>
+                    <form class="d-inline" action="/museums/<%= museum._id%>?_method=DELETE" method="post">
+                        <button class="btn btn-danger">Delete Museum</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,20 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museum List</title>
-</head>
-<body>
-    <h1>Museum List</h1>
-    <h3><a href="/museums/new">Create New Museum</a></h3>
+<% layout('layouts/boilerplate') -%>
+
+<style>
+    .btn{
+        background-color: rgba(94, 150, 255, 1);
+        border: none;
+    }
+</style>
+
+<h1>Museum List</h1>
+<h3><a href="/museums/new">Create New Museum</a></h3>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
     <% for(let i of museums) { %>
-        <ul>
-            <a href="/museums/<%= i._id %>"><%= i.title %></a>
-            <p><%= i.location %></p>
-            <p><%= i.description %></p>
-            <p><%= i.price %></p>
-        </ul>
+        <div class="col">
+            <div class="card mb-3 h-100">
+                <img src="<%= i.image %>" class="card-img-top" alt="...">
+                <div class="card-body" style="background-color: #f8f9fa">
+                <h5 class="card-title"><%= i.title %></h5>
+                <p class="card-text">Laction: <p><%= i.location %></p></p>
+                <a href="/museums/<%= i._id %>" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
     <% } %>
-</body>
-</html>
+</div>

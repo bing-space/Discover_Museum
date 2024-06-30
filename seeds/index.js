@@ -19,6 +19,7 @@ const seedDB = async () => {
 
         const museum = new Museum({
             location: `${locations[random1000]}`,
+            image: `https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg`,
             title: `${titles[random1000]}`,
             description: 'The placeholder text, beginning with the line “Lorem ipsum dolor sit amet, consectetur adipiscing elit”, looks like Latin because in its youth, centuries ago, it was Latin.',
             price: 4.55
