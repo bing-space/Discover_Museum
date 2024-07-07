@@ -6,9 +6,10 @@ const methodOverride = require('method-override');
 const engine = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const { museumSchema, reviewSchema } = require('./schemas');
 
 const Museum = require('./models/museum');
-const { museumSchema } = require('./schemas');
+const Review = require('./models/review');
 
 /**
  * Database Connection Section
@@ -42,9 +43,19 @@ const validateMuseum = (req,res, next) => {
         next();
     }
 }
+const validateReview = (req,res, next) => {
+    const {error} = reviewSchema.validate(req.body);
+    console.log(error)
+    if(error){
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }else{
+        next();
+    }
+}
 
 /**
- * CRUD Section
+ * CRUD Section: Museum
  */
 
 // GET:: home page
@@ -71,7 +82,7 @@ app.get('/museums', catchAsync(async (req, res) => {
 // GET:: show museum detail
 app.get('/museums/:id', catchAsync(async (req, res) => {
     const {id} = req.params;
-    const museum = await Museum.findById(id);
+    const museum = await Museum.findById(id).populate('reviews');
     res.render('museums/show', {museum})
 }))
 // GET:: get the edit museum form
@@ -93,6 +104,28 @@ app.delete('/museums/:id', catchAsync(async(req,res) =>{
     const museum = await Museum.findByIdAndDelete(id);
     res.redirect('/museums')
 }))
+
+/**
+ * CRUD Section: Review
+ */
+
+// Post review
+app.post('/museums/:id/reviews',validateReview, catchAsync( async (req, res) => {
+    const museum = await Museum.findById(req.params.id)
+    const review = new Review(req.body.review)
+    museum.reviews.push(review)
+    await review.save();
+    await museum.save();
+    res.redirect(`/museums/${museum._id}`)
+}))
+// Delete review
+app.delete('/museums/:id/reviews/:reviewId', catchAsync(async(req, res) => {
+    const { id, reviewId } = req.params;
+    await Museum.findByIdAndUpdate(id, {$pull: {reviews: reviewId}})
+    await Review.findByIdAndDelete(req.params.reviewId) // Will call middleware
+    res.redirect(`/museums/${id}`)
+}))
+
 
 /**
  *  Handle Error
