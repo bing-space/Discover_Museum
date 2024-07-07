@@ -4,29 +4,29 @@
     <div class="card p-4">
     <h1>New Museum</h1>
 
-    <form action="/museums" method="post">
+    <form action="/museums" method="post" novalidate class="validated-form">
         <div class="mb-3">
             <label for="name" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title">
+            <input type="text" class="form-control" id="title" name="museum[title]" required>
         </div>
         <div class="mb-3">
             <label for="location" class="form-label">Location</label>
-            <input type="text" class="form-control" id="location" name="location">
+            <input type="text" class="form-control" id="location" name="museum[location]" required>
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Image Url</label>
-            <input type="text" class="form-control" id="image" name="image">
+            <input type="text" class="form-control" id="image" name="museum[image]" required>
         </div>
         <div class="mb-3">
             <label for="price" class="form-label">Campground Price</label>
             <div class="input-group">
               <div class="input-group-text">$</div>
-              <input type="number" class="form-control" step=".01" id="price" placeholder="0.00" name="price">
+              <input type="number" class="form-control" step=".01" id="price" placeholder="0.00" name="museum[price]" required>
             </div>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" placeholder="" id="description" name="description"></textarea>
+            <textarea class="form-control" placeholder="" id="description" name="museum[description]" required></textarea>
         </div>
         <div class="d-grid gap-2">
             <button class="btn btn-primary" style="background-color: rgba(94, 150, 255, 1); border: none;" type="submit">Submit</button>

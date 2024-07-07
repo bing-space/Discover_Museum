@@ -6,7 +6,7 @@ const MuseumSchema = new Schema({
     image: String,
     description: String,
     location: String,
-    price: String
+    price: Number
 })
 
 module.exports = mongoose.model('Museum', MuseumSchema);
