@@ -7,9 +7,10 @@ const engine = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const { museumSchema, reviewSchema } = require('./schemas');
-
-const Museum = require('./models/museum');
-const Review = require('./models/review');
+const flash = require('connect-flash');
+const session =  require('express-session')
+const museums = require('./routes/museums')
+const reviews = require('./routes/reviews')
 
 /**
  * Database Connection Section
@@ -31,100 +32,41 @@ app.set('view engine','ejs');
 app.set('views', path.join(__dirname,'views'))
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
-
-const validateMuseum = (req,res, next) => {
-    // console.log(req.body)
-    const {error} = museumSchema.validate(req.body);
-    console.log(error)
-    if(error){
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    }else{
-        next();
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(flash())
+const sessionConfig = {
+    secret: 'thisisnotagoodsecret', 
+    resave: false, 
+    saveUninitialized: true, 
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 100 * 60 * 60 * 24 * 7,
+        maxAge: 100 * 60 * 60 * 24 * 7
     }
 }
-const validateReview = (req,res, next) => {
-    const {error} = reviewSchema.validate(req.body);
-    console.log(error)
-    if(error){
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    }else{
-        next();
-    }
-}
+app.use(session(sessionConfig))
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
+    next();
+})
 
+
+/**
+ * Home page
+ */ 
+app.get('/', (req, res) => {
+    res.render('home')
+})
 /**
  * CRUD Section: Museum
  */
 
-// GET:: home page
-app.get('/', (req, res) => {
-    res.render('home')
-})
-// GET:: get new museum form
-app.get('/museums/new', catchAsync(async(req,res) => {
-    res.render('museums/new')
-}))
-// POST:: post the new museum form
-app.post('/museums', validateMuseum, catchAsync(async(req, res) => {
-    const newMuseum = new Museum(req.body.museum);
-    await newMuseum.save();
-    console.log('POST NEW Museum')
-    console.log(req.body.museum)
-    res.redirect(`/museums/${newMuseum._id}`)
-}))
-// GET:: museum list page
-app.get('/museums', catchAsync(async (req, res) => {
-    const museums = await Museum.find({});
-    res.render('museums/index', {museums})
-}))
-// GET:: show museum detail
-app.get('/museums/:id', catchAsync(async (req, res) => {
-    const {id} = req.params;
-    const museum = await Museum.findById(id).populate('reviews');
-    res.render('museums/show', {museum})
-}))
-// GET:: get the edit museum form
-app.get('/museums/:id/edit', catchAsync(async(req,res) =>{
-    const {id} = req.params;
-    const museum = await Museum.findById(id);
-    res.render('museums/edit', {museum})
-}))
-// PUT:: update the edit form
-app.put('/museums/:id', validateMuseum, catchAsync(async(req,res) =>{
-    if(!req.body.museum) throw new ExpressError('Invalid Museum Data', 400)
-    const {id} = req.params;
-    const museum = await Museum.findByIdAndUpdate(id, req.body.museum, {runValidators: true});
-    res.redirect(`/museums/${museum._id}`)
-}))
-// DELETE:: delete the musuem
-app.delete('/museums/:id', catchAsync(async(req,res) =>{
-    const {id} = req.params;
-    const museum = await Museum.findByIdAndDelete(id);
-    res.redirect('/museums')
-}))
-
+app.use('/museums', museums)
 /**
  * CRUD Section: Review
  */
-
-// Post review
-app.post('/museums/:id/reviews',validateReview, catchAsync( async (req, res) => {
-    const museum = await Museum.findById(req.params.id)
-    const review = new Review(req.body.review)
-    museum.reviews.push(review)
-    await review.save();
-    await museum.save();
-    res.redirect(`/museums/${museum._id}`)
-}))
-// Delete review
-app.delete('/museums/:id/reviews/:reviewId', catchAsync(async(req, res) => {
-    const { id, reviewId } = req.params;
-    await Museum.findByIdAndUpdate(id, {$pull: {reviews: reviewId}})
-    await Review.findByIdAndDelete(req.params.reviewId) // Will call middleware
-    res.redirect(`/museums/${id}`)
-}))
+app.use('/museums/:id/reviews', reviews)
 
 
 /**
