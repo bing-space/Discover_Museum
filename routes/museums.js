@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const Museum = require('../models/museum');
 const {museumSchema} = require('../schemas.js')
+const {isLoggedIn} = require('../middleware')
 
 const validateMuseum = (req,res, next) => {
     const {error} = museumSchema.validate(req.body);
@@ -17,12 +18,12 @@ const validateMuseum = (req,res, next) => {
 }
 
 // GET:: get new museum form
-router.get('/new', (req, res) => {
+router.get('/new',isLoggedIn, (req, res) => {
     res.render('museums/new')
 })
 
 // POST:: post the new museum form
-router.post('/',validateMuseum, catchAsync(async (req, res) => { 
+router.post('/',validateMuseum, isLoggedIn,catchAsync(async (req, res) => { 
     const newMuseum = new Museum(req.body.museum);
     await newMuseum.save();
     req.flash('success','Successfully made a new museum')
@@ -38,7 +39,7 @@ router.get('/',catchAsync( async (req, res) => {
 }))
 
 // GET:: show museum detail
-router.get('/:id',catchAsync( async (req, res) =>{
+router.get('/:id', catchAsync( async (req, res) =>{
     const {id} = req.params;
     const museum = await Museum.findById(id).populate('reviews');
     if(!museum){
@@ -49,7 +50,7 @@ router.get('/:id',catchAsync( async (req, res) =>{
 }))
 
 // GET:: get the edit museum form
-router.get('/:id/edit',catchAsync( async (req,res) => {
+router.get('/:id/edit', isLoggedIn,catchAsync( async (req,res) => {
     const {id} = req.params;
     const museum = await Museum.findById(id);
     if(!museum){
@@ -60,7 +61,7 @@ router.get('/:id/edit',catchAsync( async (req,res) => {
 }))
 
 // PUT:: update the edit form
-router.put('/:id',validateMuseum, catchAsync( async (req, res) => {
+router.put('/:id',validateMuseum, isLoggedIn,catchAsync( async (req, res) => {
     //if(!req.body.museum) throw new ExpressError('Invalid Museum Data', 400)
     const {id} = req.params;
     const museum = await Museum.findByIdAndUpdate(id, req.body.museum, {runValidators: true});
@@ -68,7 +69,7 @@ router.put('/:id',validateMuseum, catchAsync( async (req, res) => {
     res.redirect(`/museums/${museum._id}`)
 }))
 // Deletes campground
-router.delete('/:id',catchAsync( async (req, res) => {
+router.delete('/:id', isLoggedIn,catchAsync( async (req, res) => {
     const {id} = req.params;
     const museum = await Museum.findByIdAndDelete(id);
     req.flash('success','Successfully deleted museum')

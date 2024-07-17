@@ -9,9 +9,12 @@ const ExpressError = require('./utils/ExpressError');
 const { museumSchema, reviewSchema } = require('./schemas');
 const flash = require('connect-flash');
 const session =  require('express-session')
-const museums = require('./routes/museums')
-const reviews = require('./routes/reviews')
-
+const museumRoutes = require('./routes/museums')
+const reviewRoutes = require('./routes/reviews')
+const userRoutes = require('./routes/users')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const User = require('./models/user')
 /**
  * Database Connection Section
  */
@@ -45,7 +48,13 @@ const sessionConfig = {
     }
 }
 app.use(session(sessionConfig))
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success')
     res.locals.error = req.flash('error')
     next();
@@ -58,15 +67,21 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.render('home')
 })
+
+/** 
+ * User Section
+ */ 
+app.use('/', userRoutes)
+
 /**
  * CRUD Section: Museum
  */
 
-app.use('/museums', museums)
+app.use('/museums', museumRoutes)
 /**
  * CRUD Section: Review
  */
-app.use('/museums/:id/reviews', reviews)
+app.use('/museums/:id/reviews', reviewRoutes)
 
 
 /**
