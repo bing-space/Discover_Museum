@@ -18,6 +18,7 @@ const seedDB = async () => {
         const random1000 = Math.floor(Math.random() * 6);
 
         const museum = new Museum({
+            author:'669823f0ac9f6653d3b85f0f',
             location: `${locations[random1000]}`,
             image: `https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg`,
             title: `${titles[random1000]}`,

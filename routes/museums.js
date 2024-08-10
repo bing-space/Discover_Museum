@@ -1,21 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
 const Museum = require('../models/museum');
-const {museumSchema} = require('../schemas.js')
-const {isLoggedIn} = require('../middleware')
-
-const validateMuseum = (req,res, next) => {
-    const {error} = museumSchema.validate(req.body);
-    console.log(error)
-    if(error){
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    }else{
-        next();
-    }
-}
+const {isLoggedIn, isAuthor, validateMuseum} = require('../middleware')
 
 // GET:: get new museum form
 router.get('/new',isLoggedIn, (req, res) => {
@@ -25,9 +12,9 @@ router.get('/new',isLoggedIn, (req, res) => {
 // POST:: post the new museum form
 router.post('/',validateMuseum, isLoggedIn,catchAsync(async (req, res) => { 
     const newMuseum = new Museum(req.body.museum);
+    newMuseum.author = req.user._id;
     await newMuseum.save();
     req.flash('success','Successfully made a new museum')
-    // console.log(newCamp);
     // Redirect
     res.redirect(`/museums/${newMuseum._id}`)
 }))
@@ -41,7 +28,8 @@ router.get('/',catchAsync( async (req, res) => {
 // GET:: show museum detail
 router.get('/:id', catchAsync( async (req, res) =>{
     const {id} = req.params;
-    const museum = await Museum.findById(id).populate('reviews');
+    const museum = await Museum.findById(id).populate({path: 'reviews', populate: {path: 'author'}}).populate('author');
+    console.log(museum)
     if(!museum){
         req.flash('error','Cannot find that museum')
         return res.redirect(`/museums`)
@@ -61,7 +49,7 @@ router.get('/:id/edit', isLoggedIn,catchAsync( async (req,res) => {
 }))
 
 // PUT:: update the edit form
-router.put('/:id',validateMuseum, isLoggedIn,catchAsync( async (req, res) => {
+router.put('/:id',validateMuseum,isLoggedIn,isAuthor, catchAsync( async (req, res) => {
     //if(!req.body.museum) throw new ExpressError('Invalid Museum Data', 400)
     const {id} = req.params;
     const museum = await Museum.findByIdAndUpdate(id, req.body.museum, {runValidators: true});
@@ -69,9 +57,9 @@ router.put('/:id',validateMuseum, isLoggedIn,catchAsync( async (req, res) => {
     res.redirect(`/museums/${museum._id}`)
 }))
 // Deletes campground
-router.delete('/:id', isLoggedIn,catchAsync( async (req, res) => {
+router.delete('/:id', isLoggedIn,isAuthor,catchAsync( async (req, res) => {
     const {id} = req.params;
-    const museum = await Museum.findByIdAndDelete(id);
+    await Museum.findByIdAndDelete(id);
     req.flash('success','Successfully deleted museum')
     res.redirect('/museums')
 }))
