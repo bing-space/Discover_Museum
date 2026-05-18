@@ -20,22 +20,17 @@ db.once("open", () => {
 app.set('view engine','ejs')
 app.set('views', path.join(__dirname,'views'))
 
+/*
+* Routes
+*/
 app.get('/', (req, res) => {
     res.render('home')
 })
-
-// Testing
-app.get('/makemuseum', async (req, res) => {
-    const themuseum = new Museum({
-        name: 'The MET', 
-        description: 'The Metropolitan Museum of Art, colloquially referred to as the Met, is an encyclopedic art museum in New York City.',
-        website: 'https://www.metmuseum.org/',
-        location: 'NY, US'
-    });
-    await themuseum.save();
-    res.send(themuseum)
+// GET Route: all museums
+app.get('/museums', async (req, res) => {
+    const museums = await Museum.find({});
+    res.render('museums/index',{museums})
 })
-
 
 app.listen(3000, () => {
     console.log('Serviing on port 3000')
