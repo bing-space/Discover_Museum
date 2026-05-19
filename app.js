@@ -31,6 +31,11 @@ app.get('/museums', async (req, res) => {
     const museums = await Museum.find({});
     res.render('museums/index',{museums})
 })
+// GET Route: get museum detail by id
+app.get('/museums/:id', async (req, res) => {
+    const museum = await Museum.findById(req.params.id)
+    res.render('museums/show',{museum})
+})
 
 app.listen(3000, () => {
     console.log('Serviing on port 3000')
