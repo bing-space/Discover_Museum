@@ -19,6 +19,8 @@ db.once("open", () => {
 
 app.set('view engine','ejs')
 app.set('views', path.join(__dirname,'views'))
+// Middleware that parses incoming HTTP requests with form data
+app.use(express.urlencoded({extended:true}))
 
 /*
 * Routes
@@ -31,11 +33,22 @@ app.get('/museums', async (req, res) => {
     const museums = await Museum.find({});
     res.render('museums/index',{museums})
 })
+// GET Route: new museum form
+app.get('/museums/new', (req, res) => {
+    res.render('museums/new')
+})
+// POST Route: post new museum info, then direct to that musem page
+app.post('/museums', async (req, res) => {
+    const museum = new Museum(req.body.museum);
+    await museum.save();
+    res.redirect(`/museums/${museum._id}`)
+})
 // GET Route: get museum detail by id
 app.get('/museums/:id', async (req, res) => {
     const museum = await Museum.findById(req.params.id)
     res.render('museums/show',{museum})
 })
+
 
 app.listen(3000, () => {
     console.log('Serviing on port 3000')
