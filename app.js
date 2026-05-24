@@ -62,6 +62,13 @@ app.put('/museums/:id', async (req, res) => {
     const museum = await Museum.findByIdAndUpdate(id, {...req.body.museum})
     res.redirect(`/museums/${museum._id}`)
 })
+// DELETE Route: delete the museum
+app.delete('/museums/:id', async (req, res) => {
+    const { id } = req.params;
+    await Museum.findByIdAndDelete(id);
+    res.redirect(`/museums`);
+})
+
 
 
 app.listen(3000, () => {

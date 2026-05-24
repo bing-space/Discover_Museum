@@ -11,6 +11,12 @@
     <h4>Website:</h4> <p><%= museum.website %></p>
     <h4>Location:</h4> <p><%= museum.location %></p>
 
+    <div>
+        <form action="/museums/<%= museum._id %>?_method=DELETE" method="POST">
+            <button>Delete Museum</button>
+        </form>
+    </div>
+
     <footer>
         <a href="/museums/<%= museum._id %>/edit">Edit Museum</a>
         <a href="/museums">All Museums</a>
