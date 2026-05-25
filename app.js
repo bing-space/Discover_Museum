@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
+const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const Museum = require('./models/museum');
 
@@ -17,7 +18,7 @@ db.once("open", () => {
     console.log("Database connected")
 });
 
-
+app.engine('ejs',ejsMate)
 app.set('view engine','ejs')
 app.set('views', path.join(__dirname,'views'))
 // Middleware that parses incoming HTTP requests with form data
