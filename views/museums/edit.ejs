@@ -1,24 +1,33 @@
 <% layout('layouts/boilerplate') %>
 
+<h1>Edit Museum</h1>
+<hr>
+
 <form action="/museums/<%= museum._id %>?_method=PUT" method="POST">
-    <div>
-        <label for="">Name</label>
-        <input type="text" name="museum[name]" id="name" value="<%= museum.name %>">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" name="museum[name]" id="name" value="<%= museum.name %>">
     </div>
-    <div>
-        <label for="">Description</label>
-        <input type="text" name="museum[description]" id="description" value="<%= museum.description %>">
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea type="text" class="form-control" name="museum[description]" id="description"><%= museum.description %></textarea>
     </div>
-    <div>
-        <label for="">Website</label>
-        <input type="text" name="museum[website]" id="website" value="<%= museum.website %>">
+    <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="text" class="form-control" name="museum[image]" id="image" value="<%= museum.image %>">
     </div>
-    <div>
-        <label for="">Location</label>
-        <input type="text" name="museum[location]" id="location" value="<%= museum.location %>">
+    <div class="mb-3">
+        <label for="website" class="form-label">Website</label>
+        <input type="text" class="form-control" name="museum[website]" id="website" value="<%= museum.website %>">
     </div>
-    <button>Update Museum</button>
+    <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" name="museum[location]" id="location" value="<%= museum.location %>">
+    </div>
+    <button class="btn btn-primary w-100">Update Museum</button>
 </form>
 <div>
-    <a href="/museums/<%= museum._id %>">Back To Museum</a>
+    <a href="/museums/<%= museum._id %>" class="btn btn-warning w-100 mt-3">Back To Museum</a>
 </div>
+
+

@@ -1,14 +1,26 @@
 <% layout('layouts/boilerplate') %>
 
-<h1>All Museums</h1>
-<div>
-    <a href="/museums/new">New Museum</a>
-</div>
-<ul>
-    <% for (let museum of museums){ %>
-        <li><a href="/museums/<%= museum._id %>">
-                <%= museum.name %>
-            </a>
-        </li>
-    <% } %>
-</ul>
+    <h1>All Museums</h1>
+    <div class="mb-3">
+        <a href="/museums/new" class="btn btn-primary">New Museum</a>
+    </div>
+
+    <div class="row row-cols-auto">
+        <% for (let museum of museums){ %>
+            <div class="col mb-3">
+                <div class="card h-100" style="width: 18rem;">
+                    <img class="card-img-top object-fit-cover border rounded" src="<%= museum.image %>" alt="Card image cap" style="height: 15vw;">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= museum.name %>
+                        </h5>
+                        <p class="card-text">
+                            <b>Location:</b>
+                            <%= museum.location %>
+                        </p>
+                        <a href="/museums/<%= museum._id %>" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>

@@ -28,7 +28,8 @@ const seedDB = async () => {
             name: `${sample(names)}`,
             description: `${sample(descriptions)}`,
             website: `www.themuseum.com`,
-            location: `${cities[random100].city}, ${cities[random100].country}`
+            location: `${cities[random100].city}, ${cities[random100].country}`,
+            image: `https://picsum.photos/400?random=${Math.random()}`
 
         })
         await themusem.save();

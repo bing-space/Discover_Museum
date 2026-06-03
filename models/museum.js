@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const MuseumSchema = new Schema({
     name: String,
+    image: String,
     description: String,
     website: String,
     location: String
