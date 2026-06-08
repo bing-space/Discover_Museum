@@ -1,29 +1,62 @@
 <% layout('layouts/boilerplate') %>
 
-<h1>New Museum</h1>
-<hr>
+    <h1>New Museum</h1>
+    <hr>
 
-<form action="/museums" method="POST">
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" name="museum[name]" id="name" aria-describedby="name">
-    </div>
-    <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" name="museum[description]" id="description" aria-describedby="description" rows="3"></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="image" class="form-label">Image</label>
-        <input type="text" class="form-control" name="museum[image]" id="image" aria-describedby="image">
-    </div>
-    <div class="mb-3">
-        <label for="website" class="form-label">Website</label>
-        <input type="text" class="form-control" name="museum[website]" id="website" aria-describedby="website">
-    </div>
-    <div class="mb-3">
-        <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control" name="museum[location]" id="location" aria-describedby="location">
-    </div>
-    <button class="btn btn-primary w-100">Submit</button>
-</form>
-<a href="/museums" class="btn btn-success w-100 mt-3">All Museums</a>
+    <form action="/museums" method="POST" class="validated-form" novalidate>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" name="museum[name]" id="name" aria-describedby="name" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter the museum name.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" name="museum[description]" id="description" aria-describedby="description"
+                rows="3" required></textarea>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter the museum description.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image</label>
+            <input type="text" class="form-control" name="museum[image]" id="image" aria-describedby="image" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter the museum image URL.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="website" class="form-label">Website</label>
+            <input type="text" class="form-control" name="museum[website]" id="website" aria-describedby="website"
+                required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter the museum website.If no website, please enter N/A.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" name="museum[location]" id="location" aria-describedby="location"
+                required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter the museum location, City, Country.
+            </div>
+        </div>
+        <button class="btn btn-primary w-100">Submit</button>
+    </form>
+    <a href="/museums" class="btn btn-success w-100 mt-3">All Museums</a>

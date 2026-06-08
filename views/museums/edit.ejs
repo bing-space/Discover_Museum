@@ -3,31 +3,59 @@
 <h1>Edit Museum</h1>
 <hr>
 
-<form action="/museums/<%= museum._id %>?_method=PUT" method="POST">
+<form action="/museums/<%= museum._id %>?_method=PUT" method="POST" class="validated-form" novalidate>
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" name="museum[name]" id="name" value="<%= museum.name %>">
+        <input type="text" class="form-control" name="museum[name]" id="name" value="<%= museum.name %>" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+            Please enter the museum name.
+        </div>
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea type="text" class="form-control" name="museum[description]" id="description"><%= museum.description %></textarea>
+        <textarea type="text" class="form-control" name="museum[description]" id="description" required><%= museum.description %></textarea>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+            Please enter the museum description.
+        </div>
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Image</label>
-        <input type="text" class="form-control" name="museum[image]" id="image" value="<%= museum.image %>">
+        <input type="text" class="form-control" name="museum[image]" id="image" value="<%= museum.image %>" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+            Please enter the museum image URL.
+        </div>
     </div>
     <div class="mb-3">
         <label for="website" class="form-label">Website</label>
-        <input type="text" class="form-control" name="museum[website]" id="website" value="<%= museum.website %>">
+        <input type="text" class="form-control" name="museum[website]" id="website" value="<%= museum.website %>" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+            Please enter the museum website.If no website, please enter N/A.
+        </div>
     </div>
     <div class="mb-3">
         <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control" name="museum[location]" id="location" value="<%= museum.location %>">
+        <input type="text" class="form-control" name="museum[location]" id="location" value="<%= museum.location %>" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+            Please enter the museum location, City, Country.
+        </div>
     </div>
     <button class="btn btn-primary w-100">Update Museum</button>
 </form>
 <div>
     <a href="/museums/<%= museum._id %>" class="btn btn-warning w-100 mt-3">Back To Museum</a>
 </div>
-
-
