@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override');
 const Museum = require('./models/museum');
 
@@ -44,6 +45,7 @@ app.get('/museums/new', (req, res) => {
 })
 // POST Route: post new museum info, then direct to that musem page
 app.post('/museums', catchAsync(async (req, res, next) => {
+    if(!req.body.museum) throw new ExpressError('Invalid Museum Data',400)
     const museum = new Museum(req.body.museum);
     await museum.save();
     res.redirect(`/museums/${museum._id}`)
@@ -72,8 +74,14 @@ app.delete('/museums/:id', catchAsync(async (req, res) => {
 }))
 
 // Basic Error Handler
+
+app.all('/{*path}', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404))
+})
+
 app.use((err,req,res) => {
-    res.send('Error, Something went wrong !')
+    const {statusCode = 500, message = 'Something went wrong !'} = err;
+    res.status(statusCode).send(message)
 })
 
 app.listen(3000, () => {
