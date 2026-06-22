@@ -45,7 +45,7 @@ app.get('/museums/new', (req, res) => {
 })
 // POST Route: post new museum info, then direct to that musem page
 app.post('/museums', catchAsync(async (req, res, next) => {
-    if(!req.body.museum) throw new ExpressError('Invalid Museum Data',400)
+    if(!req.body.museum) throw new ExpressError('Invalid Museum Data',400);
     const museum = new Museum(req.body.museum);
     await museum.save();
     res.redirect(`/museums/${museum._id}`)
@@ -79,9 +79,10 @@ app.all('/{*path}', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
 })
 
-app.use((err,req,res) => {
-    const {statusCode = 500, message = 'Something went wrong !'} = err;
-    res.status(statusCode).send(message)
+app.use((err,req,res,next) => {
+    const {statusCode = 500} = err;
+    if (!err.message) err.message = 'Something went wrong !'
+    res.status(statusCode).render('error', { err })
 })
 
 app.listen(3000, () => {
