@@ -3,6 +3,8 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
+const Joi = require('joi');
+const {museumSchema} = require('./schemas.js')
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override');
@@ -27,6 +29,17 @@ app.set('views', path.join(__dirname,'views'))
 app.use(express.urlencoded({extended:true}))
 // Middleware that allows to use 'PUT'
 app.use(methodOverride('_method'))
+// Server Validate Middleware
+const validateMuseum = (req, res, next) => {
+    const {error} = museumSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    }else{
+        next();
+    }
+}
+
 
 /*
 * Routes
@@ -44,8 +57,8 @@ app.get('/museums/new', (req, res) => {
     res.render('museums/new')
 })
 // POST Route: post new museum info, then direct to that musem page
-app.post('/museums', catchAsync(async (req, res, next) => {
-    if(!req.body.museum) throw new ExpressError('Invalid Museum Data',400);
+app.post('/museums', validateMuseum, catchAsync(async (req, res, next) => {
+    // if(!req.body.museum) throw new ExpressError('Invalid Museum Data',400);
     const museum = new Museum(req.body.museum);
     await museum.save();
     res.redirect(`/museums/${museum._id}`)
@@ -61,7 +74,7 @@ app.get('/museums/:id/edit', catchAsync(async (req, res) => {
     res.render('museums/edit',{museum})
 }))
 // PUT Route: update the museum
-app.put('/museums/:id', catchAsync(async (req, res) => {
+app.put('/museums/:id', validateMuseum, catchAsync(async (req, res) => {
     const { id } = req.params;
     const museum = await Museum.findByIdAndUpdate(id, {...req.body.museum})
     res.redirect(`/museums/${museum._id}`)
