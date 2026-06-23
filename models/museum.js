@@ -6,7 +6,13 @@ const MuseumSchema = new Schema({
     image: String,
     description: String,
     website: String,
-    location: String
+    location: String,
+    reviews: [
+        {
+            type:Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
 })
 
 module.exports = mongoose.model('Museum', MuseumSchema)
