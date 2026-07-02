@@ -1,57 +1,58 @@
 <% layout('layouts/boilerplate') %>
 
-    <!-- <div class="row row-cols-1 row-cols-sm-2">
-    <div class="col-4">
-        <img src="<%= museum.image %>" alt="museum image" class="img-fluid" style="width: 100%;">
-    </div>
-    <div class="col-6">
-        <h1><%= museum.name %></h1>
-        <hr>
-        <h5>Description:</h5> <p><%= museum.description %></p>
-        <h5>Location:</h5> <p><%= museum.location %></p>
-
-        <div class="row">
-            <div class="col-12 mb-2">
-                <form action="/museums/<%= museum._id %>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger w-100">Delete Museum</button>
-                </form>
+    <div class="card mb-3" style="max-width: 100%;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="<%= museum.image %>" alt="museum image" class="img-fluid">
             </div>
-            <div class="col-12 mb-2">
-                <a href="/museums/<%= museum._id %>/edit" class="btn btn-warning w-100">Edit Museum</a>
-            </div>
-            <div class="col-12">
-                <a href="/museums" class="btn btn-info w-100">All Museums</a>
-            </div>
-        </div>
-    </div>
-</div> -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        <%= museum.name %>
+                    </h1>
+                    <hr>
+                    <h5>Description:</h5>
+                    <p>
+                        <%= museum.description %>
+                    </p>
+                    <h5>Location:</h5>
+                    <p>
+                        <%= museum.location %>
+                    </p>
 
-<div class="card mb-3" style="max-width: 100%;">
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img src="<%= museum.image %>" alt="museum image" class="img-fluid">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h1 class="card-title"><%= museum.name %></h1>
-                <hr>
-                <h5>Description:</h5> <p><%= museum.description %></p>
-                <h5>Location:</h5> <p><%= museum.location %></p>
-
-                <div class="row">
-                    <div class="col-12 mb-2">
-                        <form action="/museums/<%= museum._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger w-100">Delete Museum</button>
-                        </form>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <a href="/museums/<%= museum._id %>/edit" class="btn btn-warning w-100">Edit Museum</a>
-                    </div>
-                    <div class="col-12">
-                        <a href="/museums" class="btn btn-info w-100">All Museums</a>
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <form action="/museums/<%= museum._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger w-100">Delete Museum</button>
+                            </form>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <a href="/museums/<%= museum._id %>/edit" class="btn btn-warning w-100">Edit Museum</a>
+                        </div>
+                        <div class="col-12">
+                            <a href="/museums" class="btn btn-info w-100">All Museums</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="card mb-3" style="max-width: 100%;">
+        <form action="" class="mb-3">
+            <div class="row g-0">
+                <div class="col-md-6">
+                    <h2>Leave a Review</h2>
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="range" class="form-range" min="1" max="5" name="review[rating]" id="rating">
+                        <button class="btn btn-success">Submit</button>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="body" class="form-label">Review:</label>
+                    <textarea name="review[body]" id="body" cols="50" rows="5"></textarea>
+                </div>
+        </form>
+    </div>
