@@ -6,9 +6,10 @@ const ejsMate = require('ejs-mate');
 const Joi = require('joi');
 const {museumSchema} = require('./schemas.js')
 const catchAsync = require('./utils/catchAsync');
-const ExpressError = require('./utils/ExpressError')
+const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const Museum = require('./models/museum');
+const Review = require('./models/review');
 
 mongoose.connect('mongodb://localhost:27017/discover-museum', {
     // useNewUrlParser: true,
@@ -42,7 +43,7 @@ const validateMuseum = (req, res, next) => {
 
 
 /*
-* Routes
+* Museum Routes
 */
 app.get('/', (req, res) => {
     res.render('home')
@@ -86,8 +87,22 @@ app.delete('/museums/:id', catchAsync(async (req, res) => {
     res.redirect(`/museums`);
 }))
 
-// Basic Error Handler
+/*
+* Review Routes
+*/
+app.post('/museums/:id/reviews', catchAsync(async (req, res) => {
+    const museum = await Museum.findById(req.params.id);
+    const review = new Review(req.body.review);
+    museum.reviews.push(review);
+    await review.save();
+    await museum.save();
+    res.redirect(`/museums/${museum._id}`);
+}))
 
+
+/*
+* Basic Error Handler
+*/
 app.all('/{*path}', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
 })
